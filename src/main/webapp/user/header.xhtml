@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html">
+
+<ui:composition>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../index.xhtml?faces-redirect=true">MeteoCal</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="searchUser.xhtml?faces-redirect=true">Search user</a></li>
+                    <li><a href="calendar.xhtml?faces-redirect=true">My Calendar</a></li>
+                    <li><a href="notification.xhtml?faces-redirect=true">Notifications</a></li>
+                    <li></li>
+                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Account
+                        <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="navbar-content">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <img src="http://placehold.it/120x120"
+                                                 alt="Alternate Text" class="img-responsive" />
+                                            <p class="text-center small">
+                                                <a href="#">Change Photo</a></p>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span>#{userBean.user.username}</span>
+                                            <p class="text-muted small" jsf:rendered="#{not empty userBean.user.email}">
+                                                #{userBean.user.email}</p>
+                                            <div class="divider">
+                                            </div>
+                                            <a href="calendar.xhtml?faces-redirect=true" class="btn btn-primary btn-sm active">My Calendar</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="navbar-footer">
+                                    <div class="navbar-footer-content">
+                                        <div class="row">
+                                            <!-->
+                                            <div class="col-md-6">
+                                                <a href="#" class="btn btn-default btn-sm">Change Passowrd</a>
+                                            </div>
+                                            <!-->
+                                            <div class="col-md-6 col-md-offset-6">
+                                                <h:form>
+                                                    <!-->Se non metto h:form (h inclusa) attorno al pulsante non funziona!!!!<!-->
+                                                    <button type="submit" jsf:action="#{loginBean.logout}" class="btn btn-default btn-danger pull-right">Logout
+                                                    </button>
+                                                </h:form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ui:composition>
+</html>
+

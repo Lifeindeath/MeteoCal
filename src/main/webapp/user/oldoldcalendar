@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Registration</title>
+</h:head>
+<h:body>
+            <p:layout>
+                <p:layoutUnit position="center" id="calendarCenter">
+                    <h:link outcome="/user/notification?faces-redirect=true" value="Notification"/>
+                    <br/>
+                    <h:link outcome="/user/event?faces-redirect=true" value="Create another event"/>
+
+                    <p:panel id="searchInfoPanel">
+                        <!-->Devo avere un panel dentro l'altro se quello interno ha un rendered e voglio chiamare update, che va quindi chiamato su quello esterno<!-->
+                        <p:panel rendered="#{calendarBean.searching}">
+                            <h:outputText value="You're viewing #{calendarBean.usernameToSearch} public calendar. Click Return to go back to your calendar"/>
+                            <br/>
+                            <p:commandButton value="Return" update="calendarTable, searchInfoPanel, :searchForm" action="#{calendarBean.stopSearch}" />
+                        </p:panel>
+                    </p:panel>
+
+                    <p:panel id="calendarTable">
+                        <!-->Rendered mostra l'elemento solo se la condizione isSearching è vera<!-->
+                        <p:dataTable id="searchedUserTable" var="searchEvent" rendered="#{calendarBean.searching}" value="#{calendarBean.allSearchedEventList}">
+                            <p:column headerText="Starting Date">
+                                <h:outputText value="#{searchEvent.startingDate}"/>
+                            </p:column>
+                            <p:column headerText="Ending Date">
+                                <h:outputText value="#{searchEvent.endingDate}" />
+                            </p:column>
+                            <p:column headerText="Starting Time">
+                                <h:outputText value="#{searchEvent.startingTime}" />
+                            </p:column>
+                            <p:column headerText="Ending Time">
+                                <h:outputText value="#{searchEvent.endingTime}" />
+                            </p:column>
+                            <p:column headerText="Host">
+                                <h:outputText value="#{searchEvent.creator.username}" rendered="#{searchEvent.isPublic}"/>
+                            </p:column>
+                            <p:column headerText="Title">
+                                <h:outputText value="#{searchEvent.title}" rendered="#{searchEvent.isPublic}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dataTable id="eventsTable" var="event" rendered="#{!calendarBean.searching}" value="#{calendarBean.eventsByPickedDate}">
+                            <p:column headerText="Starting Date">
+                                <h:outputText value="#{event.startingDate}" />
+                            </p:column>
+                            <p:column headerText="Ending Date">
+                                <h:outputText value="#{event.endingDate}" />
+                            </p:column>
+                            <p:column headerText="Starting Time">
+                                <h:outputText value="#{event.startingTime}" />
+                            </p:column>
+                            <p:column headerText="Ending Time">
+                                <h:outputText value="#{event.endingTime}" />
+                            </p:column>
+                            <p:column headerText="Host">
+                                <h:outputText value="#{event.creator.username}" />
+                            </p:column>
+                            <p:column headerText="Title">
+                                <h:outputText value="#{event.title}" />
+                            </p:column>
+                            <p:column>
+                                <h:button outcome="eventDetails.xhtml" value="Show event details">
+                                    <f:param name="event" value="#{event.id}"/>
+                                </h:button>
+                            </p:column>
+                            <p:column>
+                                <h:button outcome="edit.xhtml" value="Edit event" rendered="#{event.creator.username eq userBean.user.username}">
+                                    <f:param name="event" value="#{event.id}"/>
+                                </h:button>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dataTable id="weatherForecastTable" var="forecastElement" value="#{weatherManager.forecastList}">
+                            <p:column headerText="Date">
+                                <h:outputText value="#{forecastElement.dateTime}" />
+                            </p:column>
+                            <p:column headerText="Clouds percentage">
+                                <h:outputText value="#{forecastElement.percentageOfClouds}" />
+                            </p:column>
+                            <p:column headerText="Humidity">
+                                <h:outputText value="#{forecastElement.humidity}" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:panel>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="east" id="calendarEast" size="300">
+
+                    <p:panel id="todayView" header="Today is: #{calendarBean.today}">
+                        <h:form>
+                            <p:calendar value="#{calendarBean.pickedDate}" showOn="button">
+                                <p:ajax event="dateSelect" update=":calendarTable"/>
+                            </p:calendar>
+                        </h:form>
+                    </p:panel>
+
+                    <p:panel id="searchView" header="Search user">
+                        <h:form id="searchForm">
+                            <p:inputText id="searchuser" value="#{calendarBean.usernameToSearch}">
+                                <p:ajax update="searchusermsg"/>
+                            </p:inputText>
+                            <p:commandButton value="Search" update="searchuser,:calendarTable,:searchInfoPanel" action="#{calendarBean.searchEventListByUser}" />
+                            <p:message id="searchusermsg" for="searchuser"/>
+                        </h:form>
+                    </p:panel>
+
+                    <p:panel id="privacyView" header="Privacy setting">
+                        <h:form>
+                            <p:selectOneRadio id="privacyRadioButton" value="#{calendarBean.calendar.isPublic}">
+                                <f:selectItem itemLabel="Public" itemValue="#{true}" />
+                                <f:selectItem itemLabel="Private" itemValue="#{false}" />
+                                <p:ajax listener="#{calendarBean.updatePrivacySetting}"/>
+                            </p:selectOneRadio>
+                        </h:form>
+                    </p:panel>
+
+                    <p:panel id="deleteAccountView" header="Delete your account"></p:panel>
+                    <p:panel id="getWeatherView" header="Get weather">
+                        <h:form id="weatherForm">
+                            <p:inputText id="weather" value="#{weatherManager.cityName}">
+                                <p:ajax update="weathermsg"/>
+                            </p:inputText>
+                            <p:commandButton value="Search" update="weather, weatheresult, :weatherForecastTable" action="#{weatherManager.getWeatherByCityName}" />
+                            <p:message id="weathermsg" for="weather"/>
+                            <h:outputText id="weatheresult" value="#{weatherManager.result}" />
+                        </h:form>
+                    </p:panel>
+                </p:layoutUnit>
+            </p:layout>
+</h:body>
+</html>
+

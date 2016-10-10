@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="calendarTemplate.xhtml">
+
+    <ui:define name="rightContent">
+
+        <div jsf:id="searchView" jsf:rendered="#{calendarBean.searching}">
+        <h2 class="sub-header">#{calendarBean.usernameToSearch} public calendar</h2>
+        <div class="table-responsive">
+        <h:dataTable id="searchTable" var="searchEvent" styleClass="table table-striped" value="#{calendarBean.allSearchedEventList}">
+            <h:column>
+                <f:facet name="header">Starting Date</f:facet>
+                <h:outputText value="#{searchEvent.startingDate}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ending Date</f:facet>
+                <h:outputText value="#{searchEvent.endingDate}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Starting Time</f:facet>
+                <h:outputText value="#{searchEvent.startingTime}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ending Time</f:facet>
+                <h:outputText value="#{searchEvent.endingTime}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Host</f:facet>
+                <h:outputText value="#{searchEvent.creator.username}" rendered="#{searchEvent.isPublic}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Title</f:facet>
+                <h:outputText value="#{searchEvent.title}" rendered="#{searchEvent.isPublic}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Details</f:facet>
+                <!-->Metto il link bottone in questo modo e non con il tag 'a' perchè se no non mi prende rendered<!-->
+                <button jsf:outcome="eventDetails.xhtml?faces-redirect=true" type="button" jsf:rendered="#{searchEvent.isPublic}" class="btn btn-default btn-xs">Details
+                    <f:param name="event" value="#{searchEvent.id}"/>
+                </button>
+            </h:column>
+        </h:dataTable>
+        </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="additionalLeftBarTop">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search a username</h3>
+            </div>
+            <div class="panel-body">
+                <h:form id="searchForm">
+                    <div class="form-group">
+                        <p:inputText id="searchuser" class="form-control" placeholder="Search username" value="#{calendarBean.usernameToSearch}">
+                            <p:ajax update="searchusermsg"/>
+                        </p:inputText>
+                    </div>
+                    <p:message id="searchusermsg" for="searchuser"/>
+                    <button type="submit" jsf:update="searchuser, :searchView" jsf:action="#{calendarBean.searchEventListByUser}" class="btn btn-default">Search</button>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+</html>

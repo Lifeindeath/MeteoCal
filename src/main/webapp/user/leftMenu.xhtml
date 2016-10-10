@@ -1,0 +1,32 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition>
+    <div class="nav nav-sidebar">
+
+        <!-->Panel aggiuntivi da inserire sopra il date picker<!-->
+        <ui:insert name="additionalLeftBarTop"/>
+
+        <!-->Panel date picker<!-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pick a date</h3>
+            </div>
+            <div class="panel-body">
+                <h:form>
+                    <p:calendar value="#{calendarBean.pickedDate}" showOn="button">
+                        <p:ajax event="dateSelect" update=":rightContentPanel"/>
+                    </p:calendar>
+                </h:form>
+            </div>
+        </div>
+
+        <!-->Panel aggiuntivi da inserire sotto il date picker<!-->
+        <ui:insert name="additionalLeftBarBottom"/>
+
+    </div>
+</ui:composition>
+</html>

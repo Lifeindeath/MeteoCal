@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Registration</title>
+</h:head>
+<h:body>
+    <ui:composition template="headerTemplate.xhtml">
+        <ui:define name="content">
+            <h:form id="eventForm" class="form-horizontal">
+
+                <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Form Name</legend>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="title">Title</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:inputText  id="title" value="#{eventBean.event.title}" placeholder="Insert a title" styleClass="form-control">
+                                    <p:ajax update="titlemsg"/>
+                                </p:inputText>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="titlemsg" for="title"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="description">Description</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:inputText id="description"  value="#{eventBean.event.description}" placeholder="Insert a description" class="form-control">
+                                    <p:ajax update="descriptionmsg"/>
+                                </p:inputText>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="descriptionmsg" for="description"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="city">City</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:inputText id="city" value="#{eventBean.event.city}" placeholder="Insert a city name" class="form-control">
+                                    <p:ajax update="citymsg"/>
+                                </p:inputText>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="citymsg" for="city"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="address">Address</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:inputText id="address" value="#{eventBean.event.addressWithoutCity}" placeholder="Insert an address" class="form-control">
+                                    <p:ajax update="addressmsg"/>
+                                </p:inputText>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="addressmsg" for="address"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multiple Radios -->
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Location type</label>
+                        <div class=" col-md-3">
+                            <label class="radio" for="locationTypeRadio-0">
+                                <input type="radio" name="locationTypeRadio" id="locationTypeRadio-0" value="Indoor" checked="checked"/>
+                                Indoor
+                            </label>
+                            <label class="radio" for="locationTypeRadio-1">
+                                <input type="radio" name="locationTypeRadio" id="locationTypeRadio-1" value="Outdoor"/>
+                                Outdoor
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Multiple Radios -->
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Event privacy</label>
+                        <div class=" col-md-3">
+                            <label class="radio" for="privacyRadioButton-0">
+                                <input type="radio" name="privacyRadioButton" id="privacyRadioButton-0" value="Private" checked="checked"/>
+                                Private
+                            </label>
+                            <label class="radio" for="privacyRadioButton-1">
+                                <input type="radio" name="privacyRadioButton" id="privacyRadioButton-1" value="Public"/>
+                                Public
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Search input-->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="searchuser">Search user to invite</label>
+                        <div class="input-group col-md-6">
+                            <p:inputText type="text" id="searchuser" value="#{eventBean.usernameToSearch}" class="form-control" placeholder="Insert a username">
+                                <p:ajax update="searchusermsg"/>
+                            </p:inputText>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-default" jsf:update="searchuser,invitedUsers" jsf:action="#{eventBean.addInsertedUser}">Add</button>
+                                    </span>
+                            <p:message id="searchusermsg" for="searchuser"/>
+                        </div><!-- /input-group -->
+                    </div>
+
+                    <!-- Text input -->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="badwind">Maximum wind strength</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:inputText id="badwind" value="#{weatherBean.weatherCondition.windStrength}" class="form-control"
+                                         placeholder="Insert a wind speed in meter per second" converterMessage="Not accepted value.">
+                                    <f:validateDoubleRange maximum="60" />
+                                </p:inputText>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message for="badwind" />
+                            </div>
+                        </div>   
+                    </div>
+
+                    <!-- Text input -->
+                    <div class="form-group">                        
+                        <label class="control-label col-md-2" for="badtemperature">Minimum temperature</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:inputText id="badtemperature" value="#{weatherBean.weatherCondition.temperature}" class="form-control"
+                                             placeholder="Insert a temperature in Celsius" converterMessage="Not accepted value.">
+                                    <f:validateDoubleRange minimum="0" maximum="100" />
+                                </p:inputText>                                
+                            </div>
+                            <div class="col-md-6">
+                                <p:message for="badtemperature" />
+                            </div>
+                        </div>                         
+                    </div>
+
+                    <!-- /input-group -->
+
+                    <!-- Multiple Checkboxes -->
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Bad weather conditions</label>
+                        <div class=" col-md-3">
+                            
+                            <p:selectCheckboxMenu id="precipitationType" value="#{weatherBean.weatherCondition.precipitationType}" class="form-control"
+                                                  label="Precipitation" filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                <f:selectItems value="#{weatherBean.conditions}" />
+                            </p:selectCheckboxMenu>
+                            <!---
+                            <label class="checkbox" for="badconditions-0">
+                                <input type="checkbox" name="badconditions" id="badconditions-0" value="Rain"/>
+                                Rain
+                            </label>
+                            <label class="checkbox" for="badconditions-1">
+                                <input type="checkbox" name="badconditions" id="badconditions-1" value="Snow"/>
+                                Snow
+                            </label>
+                            <label class="checkbox" for="badconditions-2">
+                                <input type="checkbox" name="badconditions" id="badconditions-2" value="Clouds"/>
+                                Clouds
+                            </label-->
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="title">Starting time</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:calendar id="startingtime" value="#{eventBean.startingTime}" pattern="HH:mm a" timeOnly="true">
+                                    <p:ajax event="dateSelect" update="startingtimemsg"/>
+                                </p:calendar>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="startingtimemsg" for="startingtime"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="title">Ending Time</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:calendar id="endingtime" value="#{eventBean.endingTime}" pattern="HH:mm a" timeOnly="true">
+                                    <p:ajax event="dateSelect" update="endingtimemsg"/>
+                                </p:calendar>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="endingtimemsg" for="endingtime"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="title">Starting Date</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:calendar id="startingdate" value="#{eventBean.startingDate}" showOn="button">
+                                    <p:ajax event="dateSelect" update="startingdatemsg"/>
+                                </p:calendar>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="startingdatemsg" for="startingdate"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="title">Ending Date</label>
+                        <div class="input-group col-md-6">
+                            <div class="col-md-6">
+                                <p:calendar id="endingdate" value="#{eventBean.endingDate}" showOn="button">
+                                    <p:ajax event="dateSelect" update="endingdatemsg"/>
+                                </p:calendar>
+                            </div>
+                            <div class="col-md-6">
+                                <p:message id="endingdatemsg" for="endingdate"/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <p:dataTable id="invitedUsers" var="user" value="#{eventBean.invitedUserListToNotify}">
+                    <p:column headerText="Username">
+                        <h:outputText value="#{user.username}" />
+                    </p:column>
+                </p:dataTable>
+
+                <ui:insert name="additionalContent" >
+                </ui:insert>
+
+                <ui:insert name="confirmButton" >
+                </ui:insert>
+
+                <ui:insert name="deleteButton" >
+                </ui:insert>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>
+

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Registration and Login</title>
+        <h:outputStylesheet library="css" name="bootstrap.min.css"/>
+        <h:outputStylesheet library="css" name="dashboard.css"/>
+        <h:outputStylesheet library="css" name="datepicker.css"/>
+        <h:outputStylesheet library="css" name="ripples.min.css"/>
+        <h:outputStylesheet library="css" name="material-wfont.min.css"/>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <h:outputScript library="js" name="bootstrap.min.js"/>
+        <h:outputScript library="js" name="bootstrap-datepicker.js"/>
+        <h:outputScript library="js" name="material.min.js"/>
+        <h:outputScript library="js" name="ripples.min.js"/>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet library="css" name="index.css" />
+        <div class="container">
+            <!-->Contenitore dei form login e signup<!-->
+            <div class="row vertical-offset-100" jsf:rendered="#{empty userBean.user}">
+                <div class="col-md-3 col-md-offset-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row-fluid user-row">
+                                <div class="img-responsive logo logo-container" alt="MeteoCal"/>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <form jsf:id="registrationForm" class="form-signin">
+                                    <div class="form-group">
+                                        <p:outputLabel for="username" value="Username"/>
+                                        <p:inputText id="username" class="form-control" value="#{registrationBean.user.username}" placeholder="Enter username" required="true">
+                                            <p:ajax update="usernamemsg"/>
+                                        </p:inputText>
+                                        <p:message id="usernamemsg" for="username"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:outputLabel for="password" value="Password"/>
+                                        <p:password id="password" class="form-control" required="true" placeholder="Enter password" match="password2" value="#{registrationBean.user.password}"/>
+                                        <p:message id="passwordmsg" for="password"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel for="password2" value="Confirm Password"/>
+                                        <p:password id="password2" required="true" class="form-control" placeholder="Repeat password" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email">Email address</label>
+                                        <input jsf:id="email" type="email" class="form-control" placeholder="Enter email" jsf:value="#{registrationBean.user.email}" />
+                                    </div>
+                                    <button type="Submit" class="btn btn-default btn-primary" jsf:update="registrationForm" jsf:action="#{registrationBean.register}">
+                                        Register
+                                    </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-->L'offset 2 è relativo alla fine del div precendente. Ho perciò in termini di colonne 2-3-2-3-2<!-->
+                <div class="col-md-3 col-md-offset-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row-fluid user-row">
+                                <div class="img-responsive logo logo-container" alt="MeteoCal"/>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <form jsf:id="loginForm" class="form-login">
+                                <div class="form-group">
+                                    <p:outputLabel for="usernameInput" value="Username"/>
+                                    <p:inputText id="usernameInput" value="#{loginBean.username}" class="form-control" placeholder="Enter username" required="true" />
+                                </div>
+                                <div class="form-group">
+                                    <p:outputLabel for="passwordInput" value="Password"/>
+                                    <p:password id="passwordInput" value="#{loginBean.password}" class="form-control" placeholder="Enter password" required="true" />
+                                    <p:message id="loginmsg" for="passwordInput" />
+                                </div>
+                                <button type="Submit" class="btn btn-default btn-primary" jsf:update="loginForm" jsf:action="#{loginBean.login}">
+                                    Login
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="row vertical-offset-100" jsf:rendered="#{not empty userBean.user}">
+                <div class="col-md-2 col-md-offset-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row-fluid user-row">
+                                <div class="img-responsive logo logo-container" alt="MeteoCal"/>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <h3>Hello!</h3>
+                            <h5>You're logged in as #{userBean.user}.</h5>
+                                <a class="btn btn-default btn-success pull-left" href="user/calendar.xhtml?faces-redirect=true">
+                                    My Calendar
+                                </a>
+                            <!-->Se non metto h:form (h inclusa) attorno al pulsante non funziona!!!!<!-->
+                            <h:form>
+                                <button type="submit" jsf:action="#{loginBean.logout}" class="btn btn-default btn-danger pull-right">Logout
+                                </button>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </h:body>
+</html>
+

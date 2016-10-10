@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:metadata>
+    <f:viewParam name="event" value="#{eventDetailsBean.event}"/>
+</f:metadata>
+
+<head>
+</head>
+<body>
+    <ui:composition template="headerTemplate.xhtml">
+        <ui:define name="content">
+            <p:panel header="Event Details">
+                <h:form>
+                    <p:panelGrid id="eventGrid">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="title" value="Title: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="title" value="#{eventDetailsBean.event.title}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="description" value="#{eventDetailsBean.event.description}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="startingtime" value="Starting Time: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="startingtime" value="#{eventDetailsBean.event.startingTime}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="endingtime" value="Ending Time: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="endingtime" value="#{eventDetailsBean.event.endingTime}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="startingdate" value="Starting date: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="startingdate" value="#{eventDetailsBean.event.startingDate}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="endingdate" value="Ending date: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="endingdate" value="#{eventDetailsBean.event.endingDate}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="city" value="City: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="city" value="#{eventDetailsBean.event.city}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="address" value="Address: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="address" value="#{eventDetailsBean.event.addressWithoutCity}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Event privacy: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="privacySetting" value="Public event" rendered="#{eventDetailsBean.event.isPublic}" />
+                                <p:outputLabel id="privacySetting2" value="Private event" rendered="#{not eventDetailsBean.event.isPublic}" />
+                            </p:column>
+                        </p:row>
+                        <p:row rendered="#{not (userBean.user.username eq eventDetailsBean.event.creator.username)}">
+                            <p:column>
+                                <p:outputLabel for="participation" value="Will you participate? " />
+                            </p:column>
+                            <p:column>
+                                <p:selectOneRadio id="participation" value="#{eventDetailsBean.invitation.doesParticipate}" >
+                                    <f:selectItem itemLabel="Accept" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Decline" itemValue="#{false}" />
+                                    <p:ajax listener="#{eventDetailsBean.updateAcceptance}"/>
+                                </p:selectOneRadio>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+                <p:dataTable id="alreadyInvitedUsers" var="calendar" value="#{eventDetailsBean.event.participantCalendarList}">
+                    <p:column headerText="Invited users">
+                        <h:outputText value="#{calendar.owner}" />
+                    </p:column>
+                </p:dataTable>
+                <h:link outcome="/user/notification?faces-redirect=true" value="My Notifications"/>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</body>
+</html>

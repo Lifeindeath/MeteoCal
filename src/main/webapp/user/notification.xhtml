@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <ui:composition template="headerTemplate.xhtml">
+        <ui:define name="content">
+            <h1 class="sub-header">Notifications</h1>
+                    <h:dataTable id="notificationsTable" var="notification" styleClass="table table-striped" value="#{notificationBean.notificationByUser}">
+                        <p:column>
+                            <f:facet name="header">Receiving Date</f:facet>
+                            <h:outputText value="#{notification.generationDate}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">Receiving Time</f:facet>
+                            <h:outputText value="#{notification.generationTime}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">Message</f:facet>
+                            <h:outputText value="#{notification.message}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">Event Details</f:facet>
+                            <button type="button" jsf:outcome="eventDetails.xhtml?faces-redirect=true" class="btn btn-default btn-xs" jsf:rendered="#{not empty notification.relatedEvent}">
+                                Show event details<f:param name="event" value="#{notification.relatedEvent.id}"/>
+                            </button>
+                        </p:column>
+                    </h:dataTable>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>

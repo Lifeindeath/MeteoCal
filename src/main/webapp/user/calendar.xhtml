@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="calendarTemplate.xhtml">
+    <ui:define name="rightContent">
+        <h1 class="sub-header">My Calendar
+            <span class="btn-group">
+                <a href="createEvent.xhtml?faces-redirect=true" class="btn btn-success btn-default">New event</a>
+            </span>
+        </h1>
+        <div class="table-responsive">
+            <h:dataTable id="eventsTable" var="event" styleClass="table table-striped" value="#{calendarBean.eventsByPickedDate}">
+                <h:column>
+                    <f:facet name="header">Starting Date</f:facet>
+                    <h:outputText value="#{event.startingDate}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Ending Date</f:facet>
+                    <h:outputText value="#{event.endingDate}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Starting Time</f:facet>
+                    <h:outputText value="#{event.startingTime}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Ending Time</f:facet>
+                    <h:outputText value="#{event.endingTime}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Host</f:facet>
+                    <h:outputText value="#{event.creator.username}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                    <h:outputText value="#{event.title}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Details</f:facet>
+                    <button jsf:outcome="eventDetails.xhtml?faces-redirect=true" type="button" class="btn btn-default btn-xs">Details
+                        <f:param name="event" value="#{event.id}"/>
+                    </button>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Edit</f:facet>
+                    <button jsf:outcome="editEvent.xhtml?faces-redirect=true" type="button" jsf:rendered="#{event.creator.username eq userBean.user.username}" class="btn btn-default btn-xs">Edit
+                        <f:param name="event" value="#{event.id}"/>
+                    </button>
+                </h:column>
+            </h:dataTable>
+        </div>
+    </ui:define>
+
+    <!-->Pannel per la privacy<!-->
+    <ui:define name="additionalLeftBarBottom">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Set privacy</h3>
+            </div>
+            <div class="panel-body">
+                <h:form>
+                    <p:selectOneRadio id="privacyRadioButton" value="#{calendarBean.calendar.isPublic}">
+                        <f:selectItem itemLabel="Public" itemValue="#{true}" />
+                        <f:selectItem itemLabel="Private" itemValue="#{false}" />
+                        <p:ajax listener="#{calendarBean.updatePrivacySetting}"/>
+                    </p:selectOneRadio>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>
